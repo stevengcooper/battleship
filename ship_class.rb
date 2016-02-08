@@ -1,3 +1,5 @@
+require './position_class.rb'
+
 class Ship
   attr_reader :length, :row, :column, :across, :hits
   def initialize(length)
@@ -6,63 +8,60 @@ class Ship
   end
 
   def place(column,row,across)
-    if @column && @row
-      false
-    else
+    if @positions == nil
       @row = row
       @column = column
       @across = across
-      true
+      @positions = []
+
+      if @across
+        @length.times do |i|
+          row = @row
+          column = @column + i
+          @positions << Position.new(column, row)
+        end
+      else
+        @length.times do |i|
+          row = @row + i
+          column = @column
+          @positions << Position.new(column, row)
+        end
+      end
+      return true
     end
+    false
   end
 
   def covers?(column, row)
-    if @across
-      ((@column <= column && column < (@column + @length)) && (@row == row)) ? true : false
-    else
-      ((@row <= row && row < (@row + @length)) && (@column == column)) ? true : false
+    @positions.each do |i|
+      ((i.column == column) && (i.row == row)) ? (return i) : next
     end
+    false
   end
 
   def overlaps_with?(other_ship)
-    if @across
-      @length.times do |i|
-        row = @row
-        column = @column + i
-        other_ship.covers?(column, row) ? (return true) : false
-      end
-    else
-      @length.times do |i|
-        row = @row + i
-        column = @column
-        other_ship.covers?(column, row) ? (return true) : false
-      end
+    @positions.each do |i|
+      other_ship.covers?(i.column, i.row) ? (return true) : next
     end
     false
   end
 
   def fire_at(column, row)
-    if self.covers?(column,row) && @hits[column] != row
-      @hits[column] = row
+    position = self.covers?(column, row)
+    if position && !position.hit
+      position.gets_hit
+      true
     else
-      false
+      return false
     end
   end
 
   def sunk?
-    if @across
-      @length.times do |i|
-        row = @row
-        column = @column + i
-        @hits[column] == row ? true : (return false)
-      end
-    else
-      @length.times do |i|
-        row = @row + i
-        column = @column
-        @hits[column] == row ? true : (return false)
-      end
+    return false if @positions == nil
+    @positions.each do |i|
+      i.hit ? next : (return false)
     end
     true
   end
+
 end
