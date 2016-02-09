@@ -9,6 +9,10 @@ class Position
   end
 
   def gets_hit
-    @hit = true
+    if @hit
+      false
+    else
+      @hit = true
+    end
   end
 end

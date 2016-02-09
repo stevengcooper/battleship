@@ -1,9 +1,8 @@
-require './position_class.rb'
+require './position.rb'
 
 class Ship
-  attr_reader :length, :row, :column, :across, :hits
+  attr_reader :length, :row, :column, :across, :positions
   def initialize(length)
-    @hits = {}
     @length = length
   end
 
@@ -47,13 +46,8 @@ class Ship
   end
 
   def fire_at(column, row)
-    position = self.covers?(column, row)
-    if position && !position.hit
-      position.gets_hit
-      true
-    else
-      return false
-    end
+    position = covers?(column,row)
+    position && position.gets_hit
   end
 
   def sunk?

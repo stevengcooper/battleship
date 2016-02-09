@@ -1,4 +1,4 @@
-require './player_class.rb'
+require './player.rb'
 
 class ComputerPlayer < Player
   attr_reader :name
