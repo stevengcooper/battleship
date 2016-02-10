@@ -6,11 +6,16 @@ class HumanPlayer < Player
   def initialize(name = "Dave")
     @name = name
     @shots = []
+    @hits = []
     super()
   end
 
   def shots
     @shots
+  end
+
+  def hits
+    @hits
   end
 
   def place_ships(ship_lengths)
@@ -40,6 +45,31 @@ class HumanPlayer < Player
   end
 
   def display_shots
-    @grid.display_shots(@shots)
+    display_header
+    display_line
+    ("A".."J").each_with_index do |l, i|
+      y = i+1
+      line = l + " |"
+      (1..10).each do |x|
+        line << if @hits.include?([x,y])
+                  " + |"
+                elsif @shots.include?([x,y])
+                  " - |"
+                else
+                  "   |"
+                end
+      end
+      puts line
+    end
+    display_line
   end
+
+  private def display_header
+    puts "    1   2   3   4   5   6   7   8   9   10"
+  end
+
+  private def display_line
+    puts "  -----------------------------------------"
+  end
+
 end

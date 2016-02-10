@@ -36,33 +36,6 @@ class Grid
     puts "  -----------------------------------------"
   end
 
-  def display_shots(shots)
-    display_header
-    display_line
-    ("A".."J").each_with_index do |l, i|
-      y = i+1
-      line = l + " |"
-      (1..10).each do |x|
-        ship = has_ship_on?(x, y)
-        line << if shots.include?([x,y])
-                  " 0 |"
-                else
-                  "   |"
-                end
-      end
-      puts line
-    end
-    display_line
-  end
-
-  private def display_header
-    puts "    1   2   3   4   5   6   7   8   9   10"
-  end
-
-  private def display_line
-    puts "  -----------------------------------------"
-  end
-
   def x_of(string)
     string[1..-1].to_i
   end
@@ -70,7 +43,6 @@ class Grid
   def y_of(string)
     string[0].ord - 'A'.ord + 1
   end
-
 
   def fire_at(column, row)
     if has_ship_on?(column, row)
