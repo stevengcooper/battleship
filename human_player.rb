@@ -1,4 +1,5 @@
 require './player.rb'
+require "byebug"
 
 class HumanPlayer < Player
   attr_reader :name
@@ -33,7 +34,9 @@ class HumanPlayer < Player
   def call_shot
     puts "#{@name}, please enter the coordinates for your next shot (e.g. 'B10'):"
     coordinate = get_user_input
-    @shots << [@grid.x_of(coordinate), @grid.y_of(coordinate)]
+    array = [@grid.x_of(coordinate), @grid.y_of(coordinate)]
+    @shots << array
+    array
   end
 
   def display_shots
