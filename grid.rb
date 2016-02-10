@@ -14,7 +14,7 @@ class Grid
 
     puts "    1   2   3   4   5   6   7   8   9   10
   -----------------------------------------"
-  
+
     10.times do |i|
       row = "#{letters[i]} |"
       10.times do |j|
@@ -34,8 +34,20 @@ class Grid
       puts row
     end
     puts "  -----------------------------------------"
-
   end
+
+  def x_of(string)
+    x = string.split("", 2)
+    x = x.join[1..-1].to_i
+    return x
+  end
+
+  def y_of(string)
+    letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
+    y = string.split("", 2)
+    return (letters.index(y[0]) + 1)
+  end
+
 
   def fire_at(column, row)
     if has_ship_on?(column, row)
@@ -46,6 +58,13 @@ class Grid
     false
   end
 
+  def sunk?
+    return false if @ships == []
+    @ships.each do |i|
+      i.sunk? ? next : (return false)
+    end
+    true
+  end
 
   def place_ship(ship, column, row, across)
     if ship.place(column, row, across)
