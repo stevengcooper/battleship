@@ -37,15 +37,11 @@ class Grid
   end
 
   def x_of(string)
-    x = string.split("", 2)
-    x = x.join[1..-1].to_i
-    return x
+    string[1..-1].to_i
   end
 
   def y_of(string)
-    letters = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"]
-    y = string.split("", 2)
-    return (letters.index(y[0]) + 1)
+    string[0].ord - 'A'.ord + 1
   end
 
 

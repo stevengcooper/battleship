@@ -1,48 +1,30 @@
 require './position.rb'
 
 class Ship
-  attr_reader :length, :row, :column, :across, :positions
+  attr_reader :length, :row, :column, :positions
   def initialize(length)
     @length = length
+    @positions = []
   end
 
   def place(column,row,across)
-    if @positions == nil
-      @row = row
-      @column = column
-      @across = across
-      @positions = []
+    return false if @positions != []
 
-      if @across
-        @length.times do |i|
-          row = @row
-          column = @column + i
-          @positions << Position.new(column, row)
-        end
-      else
-        @length.times do |i|
-          row = @row + i
-          column = @column
-          @positions << Position.new(column, row)
-        end
-      end
-      return true
+    @length.times do |i|
+      across ? (@row = row) : (@row = row + i)
+      across ? (@column = column + i) : (@column = column)
+      @positions << Position.new(@column, @row)
     end
-    false
   end
 
   def covers?(column, row)
-    @positions.each do |i|
+    @positions.any? do |i|
       ((i.column == column) && (i.row == row)) ? (return i) : next
     end
-    false
   end
 
   def overlaps_with?(other_ship)
-    @positions.each do |i|
-      other_ship.covers?(i.column, i.row) ? (return true) : next
-    end
-    false
+    @positions.any? {|i| other_ship.covers?(i.column, i.row)}
   end
 
   def fire_at(column, row)
@@ -51,11 +33,8 @@ class Ship
   end
 
   def sunk?
-    return false if @positions == nil
-    @positions.each do |i|
-      i.hit ? next : (return false)
-    end
-    true
+    return false if @positions == []
+    @positions.all? {|i| i.hit}
   end
 
 end
